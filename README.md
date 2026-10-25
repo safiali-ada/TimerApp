@@ -22,17 +22,18 @@ A small native macOS floating focus timer (SwiftUI + AppKit, no dependencies).
 
 This compiles with `swiftc` and produces `TimerApp.app` in this folder. Double-click it to run, or copy it to `/Applications`.
 
-## Mac App Store build
+## Mac App Store release
+
+Open `TimerApp.xcodeproj` in Xcode. Signing is automatic for team J8G5UT5LRV, so Xcode registers the bundle id and creates the profiles it needs.
+
+1. Bump **Version** (`MARKETING_VERSION`) in the target's General tab for a new release.
+2. Choose **Product → Archive**.
+3. In the Organizer, choose **Distribute App → App Store Connect** to upload. Let it manage the build number.
+
+The app is sandboxed (`Resources/TimerApp.entitlements`) and ships a privacy manifest (`Resources/PrivacyInfo.xcprivacy`). `./build.sh` stays for quick unsandboxed local builds.
+
+The icon is rendered from the companion by `Tools/MakeIcon`. To regenerate it:
 
 ```bash
-./build.sh appstore
+swiftc -O -o /tmp/makeicon Tools/MakeIcon/main.swift $(ls Sources/*.swift | grep -v main.swift) && /tmp/makeicon Resources/Assets.xcassets/AppIcon.appiconset
 ```
-
-This builds a universal (Apple silicon + Intel), sandboxed app and signs it into `TimerApp.pkg`, ready to upload with Transporter. It needs:
-
-- `Resources/embedded.provisionprofile`: a Mac App Store Connect provisioning profile for `com.syedsafiali.TimerApp` (not committed).
-- The **Apple Distribution** and **Mac Installer Distribution** certificates in your keychain.
-
-Set `VERSION=1.1` for the version shown in the store. The build number defaults to the git commit count, so commit before each upload.
-
-The icon is rendered from the companion by `Tools/MakeIcon`; delete `Resources/AppIcon.icns` and rebuild to regenerate it.

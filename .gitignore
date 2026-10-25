@@ -1,4 +1,5 @@
 TimerApp.app/
 .DS_Store
-TimerApp.pkg
-Resources/embedded.provisionprofile
+xcuserdata/
+*.xcworkspace/xcuserdata/
+build/
