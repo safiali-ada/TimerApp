@@ -18,6 +18,24 @@ enum AlarmTones {
 
     static func isCustomFile(_ tone: String) -> Bool { tone.hasPrefix("/") }
 
+    /// Copies a user-picked file into Application Support. The sandbox only grants access to it
+    /// while the open panel's selection is live, so keeping our own copy lets it play after relaunch.
+    static func importFile(_ url: URL) -> URL? {
+        let fm = FileManager.default
+        guard let support = fm.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else { return nil }
+        let dir = support.appendingPathComponent("Tones", isDirectory: true)
+        let dest = dir.appendingPathComponent(url.lastPathComponent)
+        if url.standardizedFileURL == dest.standardizedFileURL { return dest }
+        do {
+            try fm.createDirectory(at: dir, withIntermediateDirectories: true)
+            if fm.fileExists(atPath: dest.path) { try fm.removeItem(at: dest) }
+            try fm.copyItem(at: url, to: dest)
+            return dest
+        } catch {
+            return nil
+        }
+    }
+
     static func displayName(_ tone: String) -> String {
         isCustomFile(tone) ? ((tone as NSString).lastPathComponent as NSString).deletingPathExtension : tone
     }

@@ -122,8 +122,8 @@ struct SettingsView: View {
         panel.allowsMultipleSelection = false
         panel.message = "Choose a sound to play when the timer ends"
         NSApp.activate(ignoringOtherApps: true)
-        if panel.runModal() == .OK, let url = panel.url {
-            settings.tone = url.path
+        if panel.runModal() == .OK, let url = panel.url, let copy = AlarmTones.importFile(url) {
+            settings.tone = copy.path
         }
     }
 }

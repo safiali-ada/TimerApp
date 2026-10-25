@@ -21,3 +21,18 @@ A small native macOS floating focus timer (SwiftUI + AppKit, no dependencies).
 ```
 
 This compiles with `swiftc` and produces `TimerApp.app` in this folder. Double-click it to run, or copy it to `/Applications`.
+
+## Mac App Store build
+
+```bash
+./build.sh appstore
+```
+
+This builds a universal (Apple silicon + Intel), sandboxed app and signs it into `TimerApp.pkg`, ready to upload with Transporter. It needs:
+
+- `Resources/embedded.provisionprofile`: a Mac App Store Connect provisioning profile for `com.syedsafiali.TimerApp` (not committed).
+- The **Apple Distribution** and **Mac Installer Distribution** certificates in your keychain.
+
+Set `VERSION=1.1` for the version shown in the store. The build number defaults to the git commit count, so commit before each upload.
+
+The icon is rendered from the companion by `Tools/MakeIcon`; delete `Resources/AppIcon.icns` and rebuild to regenerate it.

@@ -1,2 +1,4 @@
 TimerApp.app/
 .DS_Store
+TimerApp.pkg
+Resources/embedded.provisionprofile
